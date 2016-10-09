@@ -72,10 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
-//        txtName = (TextView) navHeader.findViewById(R.id.name);
-//        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
-//        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
-//        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
 
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
@@ -99,25 +95,16 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
-
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
     }
 
     /***
      * Load navigation menu header information
-     * like notifications action view (dot)
+     * like announcements action view (dot)
      */
 
     private void loadNavHeader() {
-        // showing dot next to notifications label
-        navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
+        // showing dot next to announcements label
+        navigationView.getMenu().getItem(5).setActionView(R.layout.menu_dot);
     }
 
     /***
@@ -247,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_BLOG;
                         break;
                     case R.id.nav_announcements:
-                        navItemIndex = 4;
+                        navItemIndex = 5;
                         CURRENT_TAG = TAG_ANNOUNCEMENTS;
                         break;
                     case R.id.nav_about_us:
@@ -334,9 +321,9 @@ public class MainActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.main, menu);
         }
 
-        // when fragment is notifications, load the menu created for notifications
-        if (navItemIndex == 3) {
-            getMenuInflater().inflate(R.menu.notifications, menu);
+        // when fragment is announcements, load the menu created for announcements
+        if (navItemIndex == 5) {
+            getMenuInflater().inflate(R.menu.announcements, menu);
         }
         return true;
     }
@@ -354,16 +341,16 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        // user is in notifications fragment
+        // user is in announcements fragment
         // and selected 'Mark all as Read'
         if (id == R.id.action_mark_all_read) {
-            Toast.makeText(getApplicationContext(), "All notifications marked as read!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "All announcements marked as read!", Toast.LENGTH_LONG).show();
         }
 
-        // user is in notifications fragment
+        // user is in announcements fragment
         // and selected 'Clear All'
         if (id == R.id.action_clear_notifications) {
-            Toast.makeText(getApplicationContext(), "Clear all notifications!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Clear all announcements!", Toast.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
