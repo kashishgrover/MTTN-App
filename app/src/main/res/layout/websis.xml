@@ -23,10 +23,19 @@
         android:layout_margin="4dip"
         android:padding="4dip" >
 
+        <ImageView
+            android:id="@+id/xU"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/img" />
+
         <EditText
             android:id="@+id/user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/xU"
             android:ems="10"
             android:hint="@string/rHint"
             android:inputType="phone"
@@ -46,10 +55,20 @@
         android:layout_margin="4dip"
         android:padding="4dip" >
 
+        <ImageView
+            android:id="@+id/xP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/img">
+        </ImageView>
+
         <EditText
             android:id="@+id/pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/xP"
             android:ems="10"
             android:hint="@string/bHint"
             android:inputType="phone"

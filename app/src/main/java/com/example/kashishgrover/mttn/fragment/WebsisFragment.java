@@ -1,7 +1,7 @@
 package com.example.kashishgrover.mttn.fragment;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,100 +9,154 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kashishgrover.mttn.R;
+import com.example.kashishgrover.mttn.activity.ResultActivity;
+import com.example.kashishgrover.mttn.other.InternetCheck;
+import com.example.kashishgrover.mttn.other.LogData;
 
 /**
  * Created by Kashish Grover on 10/10/2016.
  */
-public class WebsisFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class WebsisFragment extends Fragment implements View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    EditText user, pass;
+    Button submit;
+    ImageView xU, xP;
+    CheckBox cb;
 
     public WebsisFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.websis, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        LogData l = new LogData(getActivity());
+
+        try {
+
+            user = (EditText) getView().findViewById(R.id.user);
+            pass = (EditText) getView().findViewById(R.id.pass);
+            submit = (Button) getView().findViewById(R.id.submit);
+
+            cb = (CheckBox) getView().findViewById(R.id.checkBox1);
+            xU = (ImageView) getView().findViewById(R.id.xU);
+            xP = (ImageView) getView().findViewById(R.id.xP);
+
+            submit.setOnClickListener((View.OnClickListener) this);
+            xU.setOnClickListener((View.OnClickListener) this);
+            xP.setOnClickListener((View.OnClickListener) this);
+
+            cb.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener) this);
+            String u = l.getUser();
+            String p = l.getPass();
+
+            if (l.getcheckBox()) {
+                cb.setChecked(true);
+                if (!user.equals("null")) {
+                    user.setText(u, TextView.BufferType.EDITABLE);
+                    pass.setText(p, TextView.BufferType.EDITABLE);
+                }
+
+            }
+        } catch (Exception e) {
+
         }
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.xP:
+                pass.setText("");
+                break;
+            case R.id.xU:
+                user.setText("");
+                break;
+            case R.id.submit:
+                if (user.getText().toString() != null
+                        && !user.getText().toString().equals("")) {
+
+                    try {
+                        String userA = user.getText().toString();
+                        String passA = pass.getText().toString();
+
+                        if (ResultActivity.check(userA, passA)) {
+
+                            if (cb.isChecked())
+                                new LogData(getActivity()).setLoginData(
+                                        userA, passA);
+
+                            submit.setTextColor(Color.WHITE);
+
+                            if (InternetCheck.haveInternet(getActivity())) {
+                                result(userA, passA);
+                            } else
+                                InternetCheck.showNoConnectionDialog(
+                                        getActivity(), 0);
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    "Invalid username and password",
+                                    Toast.LENGTH_SHORT).show();
+                            submit.setTextColor(Color.WHITE);
+
+                        }
+
+                    } catch (NullPointerException npe) {
+                        npe.printStackTrace();
+                    }
+
+                } else {
+                    submit.setTextColor(Color.WHITE);
+                    Toast.makeText(getActivity(), "Text Fields Empty",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+        }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+
+        new LogData(getActivity()).setcheckBox(arg1);
+        if (arg1) {
+
+            try {
+                String u = user.getText().toString();
+                String p = pass.getText().toString();
+                if (ResultActivity.check(u, p)) {
+                    if (cb.isChecked())
+                        new LogData(getActivity())
+                                .setLoginData(u, p);
+                }
+            } catch (NullPointerException npe) {
+                npe.printStackTrace();
+            }
+
+        }
+
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public void result(String userA, String passA) {
+        Intent A = new Intent(getActivity(), ResultActivity.class);
+        A.putExtra("user", userA);
+        A.putExtra("pass", passA);
+        startActivity(A);
     }
 }
