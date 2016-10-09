@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/REL"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="0sp" >
+
+    <TextView
+        android:id="@+id/tvResult"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/scrollViewResult"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:padding="5sp"
+        android:textColor="@android:color/black" />
+
+    <WebView
+        android:id="@+id/webView1"
+        android:layout_width="match_parent"
+        android:layout_height="250sp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/scrollViewResult"
+        android:focusable="false"
+        android:visibility="invisible" />
+
+    <ScrollView
+        android:id="@+id/scrollViewResult"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TableLayout
+            android:id="@+id/tbLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TableRow
+                android:id="@+id/TABLEROW0"
+                android:background="#dfdfdf"
+                tools:ignore="UselessParent" >
+
+                <TextView
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:text="@string/Code"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:text="@string/Name"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="@string/Classes"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="@string/Attended"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="@string/Absent"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="@string/Percent"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_gravity="right"
+                    android:layout_weight="1"
+                    android:text="@string/Updated"
+                    android:textColor="@android:color/black" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</RelativeLayout>

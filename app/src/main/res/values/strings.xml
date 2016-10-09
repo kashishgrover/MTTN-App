@@ -38,4 +38,18 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="manipalthetalk_org">manipalthetalk.org</string>
     <string name="mttn">MTTN | We Are Manipal</string>
+
+    <string name="Percent">%</string>
+    <string name="Updated">Updated</string>
+    <string name="Code">Code</string>
+    <string name="Name">Name</string>
+    <string name="Classes">Total</string>
+    <string name="Attended">Pr</string>
+    <string name="Absent">Ab</string>
+
+    <string name="submit">Log in</string>
+    <string name="rem">Remember me</string>
+    <string name="img">IMAGEClear</string>
+    <string name="rHint">Reg. No.</string>
+    <string name="bHint">Birth date (YYYY-MM-DD)</string>
 </resources>

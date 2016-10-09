@@ -186,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
 
             case 5:
                 // announcements fragment
-                AnnouncementsFragment announcmentsFragment = new AnnouncementsFragment();
-                return announcmentsFragment;
+                AnnouncementsFragment announcementsFragment = new AnnouncementsFragment();
+                return announcementsFragment;
 
             default:
                 return new HomeFragment();
