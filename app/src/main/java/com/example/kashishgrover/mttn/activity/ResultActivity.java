@@ -2,11 +2,12 @@ package com.example.kashishgrover.mttn.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewManager;
 import android.webkit.JavascriptInterface;
@@ -21,14 +22,12 @@ import android.widget.Toast;
 import com.example.kashishgrover.mttn.R;
 import com.example.kashishgrover.mttn.other.InternetCheck;
 
-/**
- * Created by Kashish Grover on 10/10/2016.
- */
-public class ResultActivity extends Activity {
+public class ResultActivity extends ProgressActivity {
+
     private static final String main_PAGE_check = "UniCamp Student Information Portal provides you quick and personalized access to your institute record and academic status";
     private static final String JAVASCRIPT_BODY_FETCH = "javascript:window.MITINTERFACE.processContent(document.getElementById('ListAttendanceSummary_table').innerText);";
     private static final String ATTENDANCE_URL = "http://websismit.manipal.edu/websis/control/StudentAcademicProfile";
-    private static final String CHECK_LOGIN = "This portal is a read only portal. If you are a student and have the login credentials follow the link below to access";
+    private static final String CHECK_LOGIN = "Student Profile";
 
     WebView web;
     TextView tvResult;
@@ -38,17 +37,26 @@ public class ResultActivity extends Activity {
     String html;
     private int count;
     private Thread threadInc;
+    private int presentProgress;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.websis_result);
 
+//        WebView webView = (WebView) findViewById(R.id.webView1);
+//        webView.getSettings().setJavaScriptEnabled(true);
+//        webView.loadUrl("http://www.javacodegeeks.com");
+
+        getProgressBar().setVisibility(View.VISIBLE);
         try {
             count = 0;
             rl = (RelativeLayout) findViewById(R.id.REL);
             tvResult = (TextView) findViewById(R.id.tvResult);
             tb = (TableLayout) findViewById(R.id.tbLayout);
             tb.setVisibility(View.INVISIBLE);
+            getProgressBar().setMax(100);
+            setProgressss(5);
 
             String userA, passA;
             userA = getIntent().getExtras().getString("user");
@@ -87,27 +95,30 @@ public class ResultActivity extends Activity {
             final String passWor = passA;
 
             if (check(userNam, passWor)) {
-                //web = (WebView) findViewById(R.id.webView1);
+                web = (WebView) findViewById(R.id.webView1);
 
                 web.getSettings().setJavaScriptEnabled(true);
                 web.addJavascriptInterface(new MyJavaScriptInterface(tvResult),
                         "MITINTERFACE");
                 web.setWebViewClient(new WebViewClient() {
 
-                    @Override
+                    @SuppressWarnings("deprecation")
                     public void onReceivedError(WebView view, int errorCode,
                                                 String description, String failingUrl) {
 
                         super.onReceivedError(view, errorCode, description,
                                 failingUrl);
-                        //Toast.makeText(getApplicationContext(), description,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), description,
+                                Toast.LENGTH_LONG).show();
+                        finish();
+
                     }
 
                     @SuppressWarnings("deprecation")
                     public void onPageFinished(WebView view, String url) {
                         Log.i("TAG", url);
                         tvResult.setText("Loading... ");
-
+                        Log.i("*************", "KG");
                         if (url.equals(ATTENDANCE_URL)) {
                             Log.i("TAG", "1");
                             view.loadUrl(JAVASCRIPT_BODY_FETCH);
@@ -116,6 +127,7 @@ public class ResultActivity extends Activity {
                             Log.i("TAG", "2");
                             tvResult.setText("Login complete!");
                             // Log in complete let user choose options.
+                            setProgressss(80);
                             view.loadUrl(ATTENDANCE_URL);
 
                         } else if (view.findAll(main_PAGE_check) == 1) {
@@ -126,8 +138,11 @@ public class ResultActivity extends Activity {
                                 Toast.makeText(getApplicationContext(),
                                         "WRONG LOGIN DETAILS!",
                                         Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                             count++;
+
+                            setProgressss(55);
                             view.loadUrl("javascript: {"
                                     + "document.getElementById('idValue').value = '"
                                     + userNam
@@ -142,7 +157,12 @@ public class ResultActivity extends Activity {
 
                     }
                 });
+            } else {
+                Log.i("TAG", "5");
+                getProgressBar().setVisibility(View.INVISIBLE);
+                finish();
             }
+            setProgressss(25);
             web.loadUrl("http://websismit.manipal.edu/websis/control/clearSession");
 
         } catch (RuntimeException r) {
@@ -152,6 +172,7 @@ public class ResultActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "Network Error",
                         Toast.LENGTH_SHORT).show();
             }
+            finish();
         }
     }
 
@@ -271,6 +292,7 @@ public class ResultActivity extends Activity {
         String A[] = line.split(" ");
 
         tb.addView(getTableRow(A));
+
     }
 
     private void checkForParseError(String a) {
@@ -314,6 +336,9 @@ public class ResultActivity extends Activity {
     }
 
     private void parsetheshit() {
+
+        Log.i("TAGG", "inside Parsethshit");
+
         String a = tvResult.getText().toString();
         ((ViewManager) tvResult.getParent()).removeView(tvResult);
 
@@ -327,9 +352,13 @@ public class ResultActivity extends Activity {
             for (int i = 1; i < AB.length; i++) {
                 goDoEveryShitThere(AB[i], i);
             }
+            getProgressBar().setVisibility(View.INVISIBLE);
             checkForParseError(a);
         } else {
-            Toast.makeText(this, "Attendance Sheet Null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Attendance Sheet Null", Toast.LENGTH_SHORT)
+                    .show();
+            getProgressBar().setVisibility(View.INVISIBLE);
+            finish();
         }
 
     }
@@ -360,6 +389,64 @@ public class ResultActivity extends Activity {
         return answer;
     }
 
+    public void incrementProgressSlowly(final int i) {
+        threadInc = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    presentProgress = i;
+                    mech();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        threadInc.start();
+    }
+
+    private void mech() throws InterruptedException {
+        synchronized (this) {
+            while (true) {
+
+                if (presentProgress == 99) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            web.stopLoading();
+                            ((ViewManager) web.getParent()).removeView(web);
+                            web.destroy();
+                            getProgressBar().setVisibility(View.INVISIBLE);
+
+                        }
+                    });
+                    break;
+                }
+
+                if (mProgressBar.getProgress() == presentProgress) {
+                    Log.i("MECH", "Waiting" + mProgressBar.getProgress());
+                    wait();
+                    Log.i("MECH", "Resuming" + mProgressBar.getProgress());
+                } else {
+                    int x = mProgressBar.getProgress();
+                    x++;
+                    mProgressBar.setProgress(x);
+                }
+                Thread.sleep(30);
+            }
+        }
+    }
+
+    private void stopChangeandNotifyMech(int a) {
+        synchronized (this) {
+            if (mProgressBar.getProgress() != 100) {
+                presentProgress = a;
+                Log.i("stop&change", "notify" + mProgressBar.getProgress());
+                notify();
+            }
+        }
+    }
+
     private boolean isInIgnoreList(String list) {
         String L[] = { "and", "&", "of", "using" };
         for (String A : L) {
@@ -385,12 +472,22 @@ public class ResultActivity extends Activity {
                     contentView.setText(content);
                     web.stopLoading();
                     ((ViewManager) web.getParent()).removeView(web);
+                    setProgressss(98);
                     web.destroy();
+                    tb.setVisibility(View.VISIBLE);
                     parsetheshit();
                 }
 
             });
         }
+    }
+
+    private void setProgressss(final int i) {
+        if (i == 5) {
+            incrementProgressSlowly(i);
+        } else
+            stopChangeandNotifyMech(i);
+
     }
 
     public int checkNumber(String a) {
@@ -403,4 +500,30 @@ public class ResultActivity extends Activity {
             return 2;
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
 }
