@@ -18,9 +18,13 @@
         android:textColor="@android:color/black" />
 
     <WebView
-        android:id="@+id/webview_result"
+        android:id="@+id/webview_result_sis"
         android:layout_width="match_parent"
         android:layout_height="250sp"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible" />
 
 </RelativeLayout>

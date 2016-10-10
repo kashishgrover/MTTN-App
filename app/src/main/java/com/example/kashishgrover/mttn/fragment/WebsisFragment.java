@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kashishgrover.mttn.R;
-import com.example.kashishgrover.mttn.activity.ResultActivity;
+import com.example.kashishgrover.mttn.activity.WebsisResultActivity;
 import com.example.kashishgrover.mttn.other.InternetCheck;
 import com.example.kashishgrover.mttn.other.LogData;
 
@@ -96,7 +96,7 @@ public class WebsisFragment extends Fragment implements View.OnClickListener,
                         String userA = user.getText().toString();
                         String passA = pass.getText().toString();
 
-                        if (ResultActivity.check(userA, passA)) {
+                        if (WebsisResultActivity.check(userA, passA)) {
 
                             if (cb.isChecked())
                                 new LogData(getActivity()).setLoginData(
@@ -140,7 +140,7 @@ public class WebsisFragment extends Fragment implements View.OnClickListener,
             try {
                 String u = user.getText().toString();
                 String p = pass.getText().toString();
-                if (ResultActivity.check(u, p)) {
+                if (WebsisResultActivity.check(u, p)) {
                     if (cb.isChecked())
                         new LogData(getActivity())
                                 .setLoginData(u, p);
@@ -154,7 +154,7 @@ public class WebsisFragment extends Fragment implements View.OnClickListener,
     }
 
     public void result(String userA, String passA) {
-        Intent A = new Intent(getActivity(), ResultActivity.class);
+        Intent A = new Intent(getActivity(), WebsisResultActivity.class);
         A.putExtra("user", userA);
         A.putExtra("pass", passA);
         startActivity(A);
