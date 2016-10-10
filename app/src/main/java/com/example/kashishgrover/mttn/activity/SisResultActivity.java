@@ -17,14 +17,6 @@ import com.example.kashishgrover.mttn.R;
  */
 public class SisResultActivity extends Activity {
 
-    TextView tvResult;
-    TableLayout tb;
-    TableRow row;
-    RelativeLayout rl;
-    String html;
-    private int count;
-    private Thread threadInc;
-    private int presentProgress;
     String username;
     String dateOfBirth;
 
@@ -39,17 +31,17 @@ public class SisResultActivity extends Activity {
         MyWebView view = new MyWebView(this);
         view.getSettings().setJavaScriptEnabled(true);
         view.getSettings().setDomStorageEnabled(true);
-        view.loadUrl("http://websismit.manipal.edu/websis/control/clearSession");
+        view.loadUrl("https://sis.manipal.edu/studlogin.aspx");
         view.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView v, String url) {
                 v.loadUrl("javascript: {" +
-                        "document.getElementById('idValue').value = '" + username +"';" +
-                        "document.getElementById('birthDate').value = '" + dateOfBirth + "';" +
-                        "document.getElementsByName('loginform')[0].submit(); };");
+                        "document.getElementById('txtroll').value = '" + username +"';" +
+                        "document.getElementById('txtdob').value = '" + dateOfBirth + "'};");
             }
         });
-        view.loadUrl("http://websismit.manipal.edu/websis/control/StudentAcademicProfile");
+        //view.loadUrl("https://sis.manipal.edu/geninfo.aspx");
+        //view.loadUrl("https://sis.manipal.edu/tempattd.aspx");
         setContentView(view);
     }
 
@@ -68,10 +60,10 @@ public class SisResultActivity extends Activity {
             return false;
         else {
             try {
-                String[] A = p.trim().split("-");
-                if (u.length() == 9 && A[0].trim().length() == 4
+                String[] A = p.trim().split("/");
+                if (u.length() == 9 && A[0].trim().length() == 2
                         && A[1].trim().length() == 2
-                        && A[2].trim().length() == 2)
+                        && A[2].trim().length() == 4)
                     return true;
                 return false;
             } catch (Exception e) {

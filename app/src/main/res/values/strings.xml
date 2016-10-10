@@ -52,4 +52,5 @@
     <string name="img">IMAGEClear</string>
     <string name="rHint">Reg. No.</string>
     <string name="bHint">Birth date (YYYY-MM-DD)</string>
+    <string name="dd_mm_yyyy">Birth date (DD/MM/YYYY)</string>
 </resources>

@@ -38,6 +38,47 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.kashishgrover.mttn.activity.MainActivity" />
         </activity>
-    </application>
+        <activity
+            android:name=".activity.SisResultActivity"
+            android:label="MTTN"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kashishgrover.mttn.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.AboutUsActivity"
+            android:label="MTTN"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kashishgrover.mttn.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ContactUsActivity"
+            android:label="MTTN"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kashishgrover.mttn.activity.MainActivity" />
+        </activity>
+    </application>
 </manifest>

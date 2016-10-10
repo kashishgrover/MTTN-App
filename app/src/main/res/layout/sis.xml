@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="4dip" >
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/framePass"
+        android:layout_below="@+id/framePass"
+        android:layout_marginTop="5dp"
+        android:text="@string/rem" />
+
+    <RelativeLayout
+        android:id="@+id/frameUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="4dip"
+        android:padding="4dip" >
+
+        <ImageView
+            android:id="@+id/xU"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/img" />
+
+        <EditText
+            android:id="@+id/user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/xU"
+            android:ems="10"
+            android:hint="@string/rHint"
+            android:inputType="phone"
+            android:minHeight="48dip"
+            android:minWidth="64dip"
+            android:padding="4dip"
+            android:textColor="@android:color/black" >
+        </EditText>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/framePass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/frameUser"
+        android:layout_margin="4dip"
+        android:padding="4dip" >
+
+        <ImageView
+            android:id="@+id/xP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/img">
+        </ImageView>
+
+        <EditText
+            android:id="@+id/pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/xP"
+            android:ems="10"
+            android:hint="@string/dd_mm_yyyy"
+            android:inputType="phone"
+            android:minHeight="48dip"
+            android:minWidth="64dip"
+            android:padding="4dip"
+            android:textColor="@android:color/black" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/checkBox1"
+        android:text="@string/submit" />
+
+</RelativeLayout>
