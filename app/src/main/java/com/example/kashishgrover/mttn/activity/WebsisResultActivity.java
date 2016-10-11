@@ -28,7 +28,7 @@ import com.example.kashishgrover.mttn.other.InternetCheck;
 
 public class WebsisResultActivity extends Activity {
 
-    private static final String JAVASCRIPT_BODY_FETCH = "javascript:console.log(document.getElementById('ListAttendanceSummary_table').innerText);";
+    private static final String JAVASCRIPT_BODY_FETCH = "javascript:window.HTMLOUT.processHTML(document.getElementById('ListAttendanceSummary_table').innerText);";
     private static final String ATTENDANCE_URL = "http://websismit.manipal.edu/websis/control/StudentAcademicProfile";
 
     String username;
@@ -44,19 +44,16 @@ public class WebsisResultActivity extends Activity {
         dateOfBirth = getIntent().getExtras().getString("pass");
 
         WebView view = new WebView(this);
+
+        //Some settings changed so that webview loads up quickly
+
         view.getSettings().setDomStorageEnabled(true);
         view.getSettings().setJavaScriptEnabled(true);
         view.getSettings().setBlockNetworkImage(true);
-        view.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
-        view.getSettings().setSupportMultipleWindows(false);
-        view.getSettings().setSupportZoom(false);
-        view.getSettings().setSavePassword(false);
-        view.setVerticalScrollBarEnabled(false);
-        view.setHorizontalScrollBarEnabled(false);
-        view.getSettings().setAppCacheEnabled(false);
-        view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
-        view.loadUrl("http://websismit.manipal.edu/websis/control/clearSession");
+        //Add a JS interface on the view which will help extract the text required
+        view.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
+
         view.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView v, String url)
@@ -70,7 +67,7 @@ public class WebsisResultActivity extends Activity {
         view.loadUrl(ATTENDANCE_URL);
         view.setWebViewClient(new WebViewClient() {
             @Override
-            public void onPageFinished(WebView v, String url)//, Bitmap favicon)
+            public void onPageFinished(WebView v, String url)
             {
                 v.loadUrl(JAVASCRIPT_BODY_FETCH);
             }
@@ -78,9 +75,19 @@ public class WebsisResultActivity extends Activity {
         setContentView(view);
     }
 
+    /* An instance of this class will be registered as a JavaScript interface */
+    class MyJavaScriptInterface
+    {
+        @JavascriptInterface
+        @SuppressWarnings("unused")
+        public void processHTML(String html)
+        {
+            htmlData = html;
+        }
+    }
+
     @Override
     public void onDestroy() {
-        finish();
         super.onDestroy();
         Toast.makeText(getApplicationContext(),htmlData, Toast.LENGTH_SHORT).show();
     }
