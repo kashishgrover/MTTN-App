@@ -3,10 +3,9 @@ package com.example.kashishgrover.mttn.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -76,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
         // load nav menu header data
         loadNavHeader();
+
+        final ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null)
+        {
+            actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_slideshow);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // initializing navigation menu
         setUpNavigationView();
