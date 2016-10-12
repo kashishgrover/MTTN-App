@@ -3,6 +3,7 @@ package com.example.kashishgrover.mttn.activity;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -28,7 +29,7 @@ public class WebsisResultActivity extends ProgressActivity {
 
     WebView web;
     TextView tvResult;
-    TableLayout tb;
+    //TableLayout tb;
     TableRow row;
     RelativeLayout rl;
     String html;
@@ -46,8 +47,8 @@ public class WebsisResultActivity extends ProgressActivity {
             count = 0;
             rl = (RelativeLayout) findViewById(R.id.REL);
             tvResult = (TextView) findViewById(R.id.tvResult);
-            tb = (TableLayout) findViewById(R.id.tbLayout);
-            tb.setVisibility(View.INVISIBLE);
+            //tb = (TableLayout) findViewById(R.id.tbLayout);
+            //tb.setVisibility(View.INVISIBLE);
             getProgressBar().setMax(100);
             setProgressss(5);
 
@@ -149,227 +150,232 @@ public class WebsisResultActivity extends ProgressActivity {
                     ((ViewManager) web.getParent()).removeView(web);
                     setProgressss(98);
                     web.destroy();
-                    tb.setVisibility(View.VISIBLE);
-                    parseTheShit();
+                    //tb.setVisibility(View.VISIBLE);
+                    //parseTheShit();
                     //Toast.makeText(getApplicationContext(),content,Toast.LENGTH_LONG).show();
+                    tvResult.setText(content);
+                    getProgressBar().setVisibility(View.INVISIBLE);
                 }
 
             });
         }
     }
-
-    String check1, check2, check3;
-
-    private TableRow getTableRow(String A[]) {
-
-        TableRow r = new TableRow(getApplicationContext());
-        r.setBackgroundColor(Color.parseColor("#fff9d8"));
-
-        int p = 2;
-        String second = "";
-
-        float wieght[] = { 1f, 1f, 0.5f, 0.5f, 0.5f, 0.5f, 1f };
-
-        for (int i = 0; i < 7; i++) {
-
-            String Hcode = "-", Hname = "-", Htotal = "-", Hpr = "-", Hab = "-", Hp = "-", Hupdated = "-";
-
-            TextView t = new TextView(getApplicationContext());
-            t.setGravity(Gravity.CENTER);
-            t.setLayoutParams(new TableRow.LayoutParams(
-                    TableRow.LayoutParams.WRAP_CONTENT,
-                    TableRow.LayoutParams.WRAP_CONTENT, wieght[i]));
-            t.setTextColor(Color.parseColor("#567880"));
-
-            try {
-                switch (i) {
-                    case 0:
-                        t.setGravity(Gravity.LEFT);
-                        Hcode = A[0] + A[1];
-                        t.setText(Hcode);
-                        break;
-                    case 1:
-                        t.setGravity(Gravity.LEFT);
-                        for (p = 2; p < A.length; p++)
-                            if (checkNumber(A[p]) == 0)
-                                break;
-                            else
-                                second = second + " " + A[p].trim();
-                        Hname = shorten(second);
-                        t.setText(Hname);
-                        break;
-                    case 2:
-                        try {
-                            Htotal = A[p];
-                            t.setText(Htotal);
-
-                        } catch (Exception e) {
-                            t.setText("-");
-                        }
-                        break;
-                    case 3:
-
-                        try {
-                            Hpr = A[p + 1];
-                            t.setText(Hpr);
-                        } catch (Exception e) {
-                            t.setText("-");
-                        }
-                        break;
-                    case 4:
-
-                        try {
-                            Hab = A[p + 2];
-                            t.setText(Hab);
-
-                        } catch (Exception e) {
-
-                            t.setText("-");
-                        }
-                        break;
-                    case 5:
-
-                        try {
-                            Hp = A[p + 3];
-                            t.setText(Hp);
-                            if (!Hp.equals("-")) {
-
-                                try {
-                                    int pA = Integer.parseInt(Hp.trim());
-                                    if (pA <= 75) {
-                                        t.setBackgroundResource(R.drawable.textviewshapered);
-                                    }
-
-                                } catch (NumberFormatException nfe) {
-                                    Toast.makeText(getApplicationContext(),nfe.getMessage(),Toast.LENGTH_LONG).show();
-                                }
-
-                            }
-                        } catch (Exception e) {
-                            t.setText("-");
-                        }
-                        break;
-                    case 6:
-                        try {
-                            Hupdated = A[p + 4];
-                            t.setText(Hupdated);
-                        } catch (Exception e) {
-                            t.setText("-");
-                        }
-                        break;
-
-                }
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-            }
-
-            r.addView(t);
-        }
-        return r;
-    }
-
-    private void goDoEveryShitThere(String line, int i) {
-
-        line = line.replaceAll("  ", " ").replaceAll("  ", " ").trim();
-        String A[] = line.split(" ");
-
-        tb.addView(getTableRow(A));
-
-    }
-
-    private void checkForParseError(String a) {
-
-        boolean error = false;
-        String aa = "", bb = "";
-        try {
-
-            if (tb != null) {
-                TableRow tb1 = (TableRow) tb.getChildAt(1);
-                TableRow tb2 = (TableRow) tb.getChildAt(2);
-                if (tb1 != null && tb2 != null) {
-
-                    for (int i = 1; i < tb.getChildCount(); i++) {
-                        aa += ((TextView) tb2
-                                .getChildAt(tb2.getChildCount() - 1)).getText()
-                                .toString();
-                        bb += "-";
-                    }
-                    if (aa.contains(bb))
-                        error = true;
-                    else
-                        error = false;
-
-                }
-            }
-
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-        }
-
-        if (error) {
-            Toast.makeText(getApplicationContext(), aa + "Parse error" + bb,
-                    Toast.LENGTH_LONG).show();
-            ((ViewManager) tb.getParent()).removeView(tb);
-            TextView t = new TextView(getApplicationContext());
-            t.setText(a);
-            t.setTextColor(Color.BLACK);
-            rl.addView(t);
-        }
-    }
-
-    private void parseTheShit() {
-
-        Log.i("TAG", "inside ParseTheShit");
-
-        String a = tvResult.getText().toString();
-        ((ViewManager) tvResult.getParent()).removeView(tvResult);
-
-        if (a != null) {
-
-            String A[] = a.split("Updated");
-            String B = A[1].trim();
-
-            String AB[] = B.trim().split("\n");
-
-            for (int i = 1; i < AB.length; i++) {
-                goDoEveryShitThere(AB[i], i);
-            }
-            getProgressBar().setVisibility(View.INVISIBLE);
-            checkForParseError(a);
-        } else {
-            Toast.makeText(this, "Attendance Sheet Null", Toast.LENGTH_SHORT)
-                    .show();
-            getProgressBar().setVisibility(View.INVISIBLE);
-            finish();
-        }
-
-    }
-
-    private String shorten(String a) {
-        if (!a.trim().contains(" ")) {
-            if (a.length() >= 8)
-                return a.trim().substring(0, 5);
-            else
-                return a.trim();
-        }
-
-        String answer = "", A[];
-        A = a.trim().split(" ");
-
-        for (int i = 0; i < A.length; i++) {
-
-            if (A[i].trim().length() == 1 || isInIgnoreList(A[i].trim()))
-                continue;
-            else if (A[i].length() < 5) {
-                answer += A[i] + " ";
-            } else if (A[i].length() >= 5) {
-                String ex = String.valueOf(A[i].trim().charAt(0)) + ". ";
-                answer += ex;
-            }
-        }
-
-        return answer;
-    }
+//
+//    String check1, check2, check3;
+//
+//    private TableRow getTableRow(String A[]) {
+//
+//        TableRow r = new TableRow(getApplicationContext());
+//        r.setBackgroundColor(Color.parseColor("#fff9d8"));
+//
+//        int p = 2;
+//        String second = "";
+//
+//        float wieght[] = { 1f, 1f, 0.5f, 0.5f, 0.5f, 0.5f, 1f };
+//
+//        for (int i = 0; i < 7; i++) {
+//
+//            String Hcode = "-", Hname = "-", Htotal = "-", Hpr = "-", Hab = "-", Hp = "-", Hupdated = "-";
+//
+//            TextView t = new TextView(getApplicationContext());
+//            t.setGravity(Gravity.CENTER);
+//            t.setLayoutParams(new TableRow.LayoutParams(
+//                    TableRow.LayoutParams.WRAP_CONTENT,
+//                    TableRow.LayoutParams.WRAP_CONTENT, wieght[i]));
+//            t.setTextColor(Color.parseColor("#567880"));
+//
+//            try {
+//                switch (i) {
+//                    case 0:
+//                        t.setGravity(Gravity.LEFT);
+//                        Hcode = A[0] + A[1];
+//                        t.setText(Hcode);
+//                        break;
+//                    case 1:
+//                        t.setGravity(Gravity.LEFT);
+//                        for (p = 2; p < A.length; p++)
+//                            if (checkNumber(A[p]) == 0)
+//                                break;
+//                            else
+//                                second = second + " " + A[p].trim();
+//                        Hname = shorten(second);
+//                        t.setText(Hname);
+//                        break;
+//                    case 2:
+//                        try {
+//                            Htotal = A[p];
+//                            t.setText(Htotal);
+//
+//                        } catch (Exception e) {
+//                            t.setText("-");
+//                        }
+//                        break;
+//                    case 3:
+//
+//                        try {
+//                            Hpr = A[p + 1];
+//                            t.setText(Hpr);
+//                        } catch (Exception e) {
+//                            t.setText("-");
+//                        }
+//                        break;
+//                    case 4:
+//
+//                        try {
+//                            Hab = A[p + 2];
+//                            t.setText(Hab);
+//
+//                        } catch (Exception e) {
+//
+//                            t.setText("-");
+//                        }
+//                        break;
+//                    case 5:
+//
+//                        try {
+//                            Hp = A[p + 3];
+//                            t.setText(Hp);
+//                            if (!Hp.equals("-")) {
+//
+//                                try {
+//                                    int pA = Integer.parseInt(Hp.trim());
+//                                    if (pA <= 75) {
+//                                        t.setBackgroundResource(R.drawable.textviewshapered);
+//                                    }
+//
+//                                } catch (NumberFormatException nfe) {
+//                                    Toast.makeText(getApplicationContext(),nfe.getMessage(),Toast.LENGTH_LONG).show();
+//                                }
+//
+//                            }
+//                        } catch (Exception e) {
+//                            t.setText("-");
+//                        }
+//                        break;
+//                    case 6:
+//                        try {
+//                            Hupdated = A[p + 4];
+//                            t.setText(Hupdated);
+//                        } catch (Exception e) {
+//                            t.setText("-");
+//                        }
+//                        break;
+//
+//                }
+//            } catch (Exception e) {
+//                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+//            }
+//
+//            r.addView(t);
+//        }
+//        return r;
+//    }
+//
+//    private void goDoEveryShitThere(String line, int i) {
+//
+//        line = line.replaceAll("  ", " ").replaceAll("  ", " ").trim();
+//        String A[] = line.split(" ");
+//
+//        tb.addView(getTableRow(A));
+//
+//    }
+//
+//    private void checkForParseError(String a) {
+//
+//        boolean error = false;
+//        String aa = "", bb = "";
+//        try {
+//
+//            if (tb != null) {
+//                TableRow tb1 = (TableRow) tb.getChildAt(1);
+//                TableRow tb2 = (TableRow) tb.getChildAt(2);
+//                if (tb1 != null && tb2 != null) {
+//
+//                    for (int i = 1; i < tb.getChildCount(); i++) {
+//                        aa += ((TextView) tb2
+//                                .getChildAt(tb2.getChildCount() - 1)).getText()
+//                                .toString();
+//                        bb += "-";
+//                    }
+//                    if (aa.contains(bb))
+//                        error = true;
+//                    else
+//                        error = false;
+//
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+//        }
+//
+//        if (error) {
+//            Toast.makeText(getApplicationContext(), aa + "Parse error" + bb,
+//                    Toast.LENGTH_LONG).show();
+//            ((ViewManager) tb.getParent()).removeView(tb);
+//            TextView t = new TextView(getApplicationContext());
+//            t.setText(Html.fromHtml(a));
+//            t.setTextColor(Color.BLACK);
+//            rl.addView(t);
+//        }
+//    }
+//
+//    private void parseTheShit() {
+//
+//        Log.i("TAG", "inside ParseTheShit");
+//
+//        String a = tvResult.getText().toString();;
+//        web.loadDataWithBaseURL(null, a, "text/html", "UTF-8", null);
+//
+//        //tvResult.setText(Html.fromHtml(a));
+//        ((ViewManager) tvResult.getParent()).removeView(tvResult);
+//
+//        if (a != null) {
+//
+//            String A[] = a.split("Updated");
+//            String B = A[1].trim();
+//
+//            String AB[] = B.trim().split("\n");
+//
+//            for (int i = 1; i < AB.length; i++) {
+//                goDoEveryShitThere(AB[i], i);
+//            }
+//            getProgressBar().setVisibility(View.INVISIBLE);
+//            checkForParseError(a);
+//        } else {
+//            Toast.makeText(this, "Attendance Sheet Null", Toast.LENGTH_SHORT)
+//                    .show();
+//            getProgressBar().setVisibility(View.INVISIBLE);
+//            finish();
+//        }
+//
+//    }
+//
+//    private String shorten(String a) {
+//        if (!a.trim().contains(" ")) {
+//            if (a.length() >= 8)
+//                return a.trim().substring(0, 5);
+//            else
+//                return a.trim();
+//        }
+//
+//        String answer = "", A[];
+//        A = a.trim().split(" ");
+//
+//        for (int i = 0; i < A.length; i++) {
+//
+//            if (A[i].trim().length() == 1 || isInIgnoreList(A[i].trim()))
+//                continue;
+//            else if (A[i].length() < 5) {
+//                answer += A[i] + " ";
+//            } else if (A[i].length() >= 5) {
+//                String ex = String.valueOf(A[i].trim().charAt(0)) + ". ";
+//                answer += ex;
+//            }
+//        }
+//
+//        return answer;
+//    }
 
     public void incrementProgressSlowly(final int i) {
         threadInc = new Thread(new Runnable() {
