@@ -31,6 +31,9 @@ public class WebsisResultActivity extends Activity {
     private static final String JAVASCRIPT_BODY_FETCH = "javascript:window.HTMLOUT.processHTML(document.getElementById('ListAttendanceSummary_table').innerText);";
     private static final String ATTENDANCE_URL = "http://websismit.manipal.edu/websis/control/StudentAcademicProfile";
 
+    private static final String CHECK_MAIN_PAGE = "Student Information Portal";
+    private static final String CHECK_LOGIN = "This portal is a read only portal";
+
     String username;
     String dateOfBirth;
     String htmlData = "Null";
@@ -54,22 +57,27 @@ public class WebsisResultActivity extends Activity {
         //Add a JS interface on the view which will help extract the text required
         view.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
 
-        view.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView v, String url)
-            {
-                v.loadUrl("javascript: {" +
-                            "document.getElementById('idValue').value = '" + username +"';" +
-                            "document.getElementById('birthDate').value = '" + dateOfBirth + "';" +
-                            "document.getElementsByName('loginform')[0].submit(); };");
-            }
-        });
         view.loadUrl(ATTENDANCE_URL);
         view.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView v, String url)
             {
-                v.loadUrl(JAVASCRIPT_BODY_FETCH);
+                v.loadUrl("javascript: {" +
+                    "document.getElementById('idValue').value = '" + username +"';" +
+                    "document.getElementById('birthDate').value = '" + dateOfBirth + "';" +
+                    "document.getElementsByName('loginform')[0].submit(); };");
+                v.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageFinished(WebView w, String url) {
+                        w.loadUrl(ATTENDANCE_URL);
+                        w.setWebViewClient(new WebViewClient() {
+                            @Override
+                            public void onPageFinished(WebView x, String url) {
+                                x.loadUrl(JAVASCRIPT_BODY_FETCH);
+                            }
+                        });
+                    }
+                });
             }
         });
         setContentView(view);
