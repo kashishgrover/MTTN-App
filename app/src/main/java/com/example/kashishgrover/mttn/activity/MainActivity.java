@@ -329,7 +329,6 @@ public class MainActivity extends AppCompatActivity {
             drawer.openDrawer(GravityCompat.START);  // Hamburger Icon Opens Drawer
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
