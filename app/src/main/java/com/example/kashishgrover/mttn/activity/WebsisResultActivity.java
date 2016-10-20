@@ -28,6 +28,7 @@ public class WebsisResultActivity extends ProgressActivity {
 
     private static final String JAVASCRIPT_BODY_FETCH = "javascript:window.HTMLOUT.processContent(document.getElementById('ListAttendanceSummary_table').innerText);";
     private static final String ATTENDANCE_URL = "http://websismit.manipal.edu/websis/control/StudentAcademicProfile";
+    private static final String LOGOUT_URL = "http://websismit.manipal.edu/websis/control/clearSession";
 
     WebView web;
     TextView tvResult;
@@ -100,15 +101,11 @@ public class WebsisResultActivity extends ProgressActivity {
         //Add a JS interface on the view which will help extract the text required
         web.addJavascriptInterface(new MyJavaScriptInterface(tvResult), "HTMLOUT");
 
-        web.loadUrl(ATTENDANCE_URL);
+        web.loadUrl(LOGOUT_URL);
         web.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView v, String url)
             {
-                if (url.equals(ATTENDANCE_URL)) {
-                    Log.i("TAG", "1");
-                    v.loadUrl(JAVASCRIPT_BODY_FETCH);
-                }
                 Log.i("HELLO FROM","1111111111");
                 tvResult.setText("Loading...");
                 v.loadUrl("javascript: {" +
