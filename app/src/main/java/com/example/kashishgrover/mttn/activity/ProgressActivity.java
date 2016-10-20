@@ -1,17 +1,13 @@
 package com.example.kashishgrover.mttn.activity;
 
-import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.kashishgrover.mttn.R;
 
-/**
- * Created by Kashish Grover on 10/12/2016.
- */
-public class ProgressActivity extends ActionBarActivity {
+public class ProgressActivity extends AppCompatActivity {
 
     protected ProgressBar mProgressBar;
 
