@@ -192,6 +192,9 @@ public class WebsisResultActivity extends ProgressActivity {
                         }
                         else if(j==5)
                         {
+                            int num = Integer.parseInt(subjectParams[j]);
+                            if(num <= 75)
+                                subjectParams[j] = subjectParams[j] + "*";
                             percentage = "\nPercentage: "+subjectParams[j];
                         }
                         else if(j==6)
@@ -200,7 +203,9 @@ public class WebsisResultActivity extends ProgressActivity {
                         }
                     }
                     String params = total+present+absent+percentage+updated;
+
                     ListItem x = new ListItem(name,params);
+
                     subjectListArray.add(x);
                     Log.i("Subject:",subjectArray[i]);
                 }
