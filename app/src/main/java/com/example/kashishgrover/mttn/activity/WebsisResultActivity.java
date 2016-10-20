@@ -16,9 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.kashishgrover.mttn.ListItem;
+import com.example.kashishgrover.mttn.MyListAdapter;
 import com.example.kashishgrover.mttn.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 public class WebsisResultActivity extends ProgressActivity {
 
@@ -30,9 +34,9 @@ public class WebsisResultActivity extends ProgressActivity {
     LinearLayout linearLayout;
     private int presentProgress;
 
-    ArrayList<String> subjectListArray = new ArrayList<>();
+    ArrayList<ListItem> subjectListArray = new ArrayList<>();
 
-    ArrayAdapter<String> adapter;
+    MyListAdapter adapter;
     ListView listView;
 
     @Override
@@ -40,7 +44,7 @@ public class WebsisResultActivity extends ProgressActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.websis_result);
 
-        adapter = new ArrayAdapter<>(this, R.layout.websis_result_row, subjectListArray);
+        adapter = new MyListAdapter(this, subjectListArray);
         listView = (ListView) findViewById(R.id.listViewWebsis);
         listView.setAdapter(adapter);
 
@@ -147,9 +151,7 @@ public class WebsisResultActivity extends ProgressActivity {
                     setProgressPlease(98);
                     web.destroy();
 
-                    //parseTheContentAndDisplay(aContent);
-                    subjectListArray.add(aContent);
-                    adapter.notifyDataSetChanged();
+                    parseTheContentAndDisplay(aContent);
 
                     getProgressBar().setVisibility(View.INVISIBLE);
                 }
@@ -158,8 +160,54 @@ public class WebsisResultActivity extends ProgressActivity {
         }
 
         private void parseTheContentAndDisplay(String aContent) {
-
-            subjectListArray.add(aContent);
+            try {
+                String[] subjectArray = aContent.split("(\\s\\s)+");
+                for(int i=1; i<subjectArray.length; i++)
+                {
+                    subjectArray[i] = subjectArray[i].trim();
+                    String[] subjectParams = subjectArray[i].split("[\\t]");
+                    String name = "";
+                    String total = "";
+                    String present = "";
+                    String absent = "";
+                    String percentage = "";
+                    String updated = "";
+                    for(int j=1;j<subjectParams.length;j++)
+                    {
+                        if(j==1)
+                        {
+                            name = subjectParams[j];
+                        }
+                        if(j==2)
+                        {
+                            total = "\nTotal: "+subjectParams[j];
+                        }
+                        else if(j==3)
+                        {
+                            present = "\nPresent: "+subjectParams[j];
+                        }
+                        else if(j==4)
+                        {
+                            absent = "\nAbsent: "+subjectParams[j];
+                        }
+                        else if(j==5)
+                        {
+                            percentage = "\nPercentage: "+subjectParams[j];
+                        }
+                        else if(j==6)
+                        {
+                            updated = "\nUpdated: "+subjectParams[j];
+                        }
+                    }
+                    String params = total+present+absent+percentage+updated;
+                    ListItem x = new ListItem(name,params);
+                    subjectListArray.add(x);
+                    Log.i("Subject:",subjectArray[i]);
+                }
+            }catch(PatternSyntaxException e)
+            {
+                e.printStackTrace();
+            }
             adapter.notifyDataSetChanged();
         }
     }
