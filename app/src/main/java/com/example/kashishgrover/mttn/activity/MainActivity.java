@@ -3,20 +3,19 @@ package com.example.kashishgrover.mttn.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.kashishgrover.mttn.R;
@@ -31,9 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
-    private View navHeader;
-    private ImageView imgNavHeaderBg, imgProfile;
-    private TextView txtName, txtWebsite;
     private Toolbar toolbar;
 
     // index to identify current nav menu item
@@ -51,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
     // toolbar titles respected to selected nav menu item
     private String[] activityTitles;
 
-    // flag to load home fragment when user presses back key
-    private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
     @Override
@@ -61,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mHandler = new Handler();
 
@@ -68,20 +63,13 @@ public class MainActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         // Navigation view header
-        navHeader = navigationView.getHeaderView(0);
+        View navHeader = navigationView.getHeaderView(0);
 
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
         // load nav menu header data
         loadNavHeader();
-
-        final ActionBar actionBar = getSupportActionBar();
-        if(actionBar!=null)
-        {
-            actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_slideshow);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         // initializing navigation menu
         setUpNavigationView();
@@ -155,30 +143,24 @@ public class MainActivity extends AppCompatActivity {
         switch (navItemIndex) {
             case 0:
                 // home
-                HomeFragment homeFragment = new HomeFragment();
-                return homeFragment;
+                return new HomeFragment();
             case 1:
                 // websis
-                WebsisFragment websisFragment = new WebsisFragment();
-                return websisFragment;
+                return new WebsisFragment();
             case 2:
                 // sis fragment
-                SisFragment sisFragment = new SisFragment();
-                return sisFragment;
+                return new SisFragment();
             case 3:
                 // directory fragment
-                DirectoryFragment directoryFragment = new DirectoryFragment();
-                return directoryFragment;
+                return new DirectoryFragment();
 
             case 4:
                 // blog fragment
-                BlogFragment blogFragment = new BlogFragment();
-                return blogFragment;
+                return new BlogFragment();
 
             case 5:
                 // announcements fragment
-                AnnouncementsFragment announcementsFragment = new AnnouncementsFragment();
-                return announcementsFragment;
+                return new AnnouncementsFragment();
 
             default:
                 return new HomeFragment();
@@ -199,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
             // This method will trigger on item Click of navigation menu
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
@@ -257,17 +239,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
-
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer,
+                toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
             }
         };
@@ -289,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
 
         // This code loads home fragment when back key is pressed
         // when user is in other fragment than home
+        boolean shouldLoadHomeFragOnBackPress = true;
         if (shouldLoadHomeFragOnBackPress) {
             // checking if user is on other navigation menu
             // rather than home
@@ -344,6 +325,15 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Clear all announcements!", Toast.LENGTH_LONG).show();
         }
 
+        if (id == android.R.id.home) {
+            drawer.openDrawer(GravityCompat.START);  // Hamburger Icon Opens Drawer
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setToolbar(Toolbar toolbar) {
+        this.toolbar = toolbar;
     }
 }

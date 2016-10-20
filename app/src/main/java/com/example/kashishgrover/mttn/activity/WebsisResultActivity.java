@@ -149,8 +149,8 @@ public class WebsisResultActivity extends ProgressActivity {
                     web.stopLoading();
                     ((ViewManager) web.getParent()).removeView(web);
                     setProgressPlease(98);
+                    web.destroyDrawingCache();
                     web.destroy();
-
                     parseTheContentAndDisplay(aContent);
 
                     getProgressBar().setVisibility(View.INVISIBLE);
