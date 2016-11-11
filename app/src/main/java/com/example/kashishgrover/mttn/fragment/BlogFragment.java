@@ -1,21 +1,32 @@
 package com.example.kashishgrover.mttn.fragment;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.webkit.WebViewFragment;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.kashishgrover.mttn.R;
 import com.example.kashishgrover.mttn.activity.SimpleRSSReaderActivity;
 import com.example.kashishgrover.mttn.activity.SisResultActivity;
 
-/**
- * Created by Kashish Grover on 10/10/2016.
- */
+import java.util.List;
+
 public class BlogFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -24,25 +35,62 @@ public class BlogFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private String currentURL = "http://manipalthetalk.org/";
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Intent A = new Intent(getActivity(), SimpleRSSReaderActivity.class);
-        startActivity(A);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+
+        Log.d("SwA", "WVF onCreateView");
+        View v = inflater.inflate(R.layout.fragment_blog, container, false);
+        if (currentURL != null) {
+            Log.d("SwA", "Current URL 1["+currentURL+"]");
+            WebView wv = (WebView) v.findViewById(R.id.webViewBlog);
+            wv.setWebViewClient(new SwAWebClient());
+            wv.loadUrl(currentURL);
+            wv.setWebViewClient(new WebViewClient() {
+                @SuppressLint("NewApi")
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    Log.i("HELLO","onPageFinished()");
+                    super.onPageFinished(view, url);
+                }
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    Log.i("HELLO","onPageStarted()");
+                    super.onPageStarted(view, url, favicon);
+                }
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+                @Override
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    handler.proceed(); // Ignore SSL certificate errors
+                }
+            });
+        }
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private class SwAWebClient extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return false;
         }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -56,16 +104,6 @@ public class BlogFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

@@ -1,12 +1,21 @@
 package com.example.kashishgrover.mttn.fragment;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -23,140 +32,85 @@ import com.example.kashishgrover.mttn.other.LogData;
 /**
  * Created by Kashish Grover on 10/10/2016.
  */
-public class SisFragment extends Fragment implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener {
+public class SisFragment extends Fragment {
 
-    EditText user, pass;
-    Button submit;
-    ImageView xU, xP;
-    CheckBox cb;
+    private SisFragment.OnFragmentInteractionListener mListener;
 
     public SisFragment() {
         // Required empty public constructor
     }
 
+    private String currentURL = "https://sis.manipal.edu/studlogin.aspx";
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.sis, container, false);
+
+        Log.d("SwA", "WVF onCreateView");
+        View v = inflater.inflate(R.layout.sis, container, false);
+        if (currentURL != null) {
+            Log.d("SwA", "Current URL 1["+currentURL+"]");
+            WebView wv = (WebView) v.findViewById(R.id.webViewSis);
+            wv.setWebViewClient(new SisFragment.SwAWebClient());
+            wv.loadUrl(currentURL);
+            wv.setWebViewClient(new WebViewClient() {
+                @SuppressLint("NewApi")
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    Log.i("HELLO","onPageFinished()");
+                    super.onPageFinished(view, url);
+                }
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    Log.i("HELLO","onPageStarted()");
+                    super.onPageStarted(view, url, favicon);
+                }
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+                @Override
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    handler.proceed(); // Ignore SSL certificate errors
+                }
+            });
+        }
+        return v;
+    }
+
+    private class SwAWebClient extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return false;
+        }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        LogData l = new LogData(getActivity());
-
-        try {
-
-            user = (EditText) getView().findViewById(R.id.user);
-            pass = (EditText) getView().findViewById(R.id.pass);
-            submit = (Button) getView().findViewById(R.id.submit);
-
-            cb = (CheckBox) getView().findViewById(R.id.checkBox1);
-            xU = (ImageView) getView().findViewById(R.id.xU);
-            xP = (ImageView) getView().findViewById(R.id.xP);
-
-            submit.setOnClickListener((View.OnClickListener) this);
-            xU.setOnClickListener((View.OnClickListener) this);
-            xP.setOnClickListener((View.OnClickListener) this);
-
-            cb.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener) this);
-            String u = l.getUser();
-            String p = l.getPass();
-
-            if (l.getcheckBox()) {
-                cb.setChecked(true);
-                if (!user.equals("null")) {
-                    user.setText(u, TextView.BufferType.EDITABLE);
-                    pass.setText(p, TextView.BufferType.EDITABLE);
-                }
-
-            }
-        } catch (Exception e) {
-
-        }
     }
 
     @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.xP:
-                pass.setText("");
-                break;
-            case R.id.xU:
-                user.setText("");
-                break;
-            case R.id.submit:
-                if (user.getText().toString() != null
-                        && !user.getText().toString().equals("")) {
-
-                    try {
-                        String userA = user.getText().toString();
-                        String passA = pass.getText().toString();
-
-                        if (SisResultActivity.check(userA, passA)) {
-
-                            if (cb.isChecked())
-                                new LogData(getActivity()).setLoginData(
-                                        userA, passA);
-
-                            submit.setTextColor(Color.WHITE);
-
-                            if (InternetCheck.haveInternet(getActivity())) {
-                                result(userA, passA);
-                            } else
-                                InternetCheck.showNoConnectionDialog(
-                                        getActivity(), 0);
-                        } else {
-                            Toast.makeText(getActivity(),
-                                    "Invalid username and password",
-                                    Toast.LENGTH_SHORT).show();
-                            submit.setTextColor(Color.WHITE);
-
-                        }
-
-                    } catch (NullPointerException npe) {
-                        npe.printStackTrace();
-                    }
-
-                } else {
-                    submit.setTextColor(Color.WHITE);
-                    Toast.makeText(getActivity(), "Text Fields Empty",
-                            Toast.LENGTH_SHORT).show();
-
-                }
-                break;
-        }
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
-
-        new LogData(getActivity()).setcheckBox(arg1);
-        if (arg1) {
-
-            try {
-                String u = user.getText().toString();
-                String p = pass.getText().toString();
-                if (SisResultActivity.check(u, p)) {
-                    if (cb.isChecked())
-                        new LogData(getActivity())
-                                .setLoginData(u, p);
-                }
-            } catch (NullPointerException npe) {
-                npe.printStackTrace();
-            }
-
-        }
-
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
-    public void result(String userA, String passA) {
-        Intent A = new Intent(getActivity(), SisResultActivity.class);
-        A.putExtra("user", userA);
-        A.putExtra("pass", passA);
-        startActivity(A);
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }
