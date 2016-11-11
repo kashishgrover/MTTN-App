@@ -68,15 +68,15 @@ public class MainActivity extends AppCompatActivity {
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
-        // load nav menu header data
-        loadNavHeader();
+//        // load nav menu header data
+//        loadNavHeader();
 
         // initializing navigation menu
         setUpNavigationView();
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
-            CURRENT_TAG = TAG_HOME;
+            CURRENT_TAG = TAG_WEBSIS;
             loadHomeFragment();
         }
     }
@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
      * like announcements action view (dot)
      */
 
-    private void loadNavHeader() {
-        // showing dot next to announcements label
-        navigationView.getMenu().getItem(5).setActionView(R.layout.menu_dot);
-    }
+//    private void loadNavHeader() {
+//        // showing dot next to announcements label
+//        navigationView.getMenu().getItem(5).setActionView(R.layout.menu_dot);
+//    }
 
     /***
      * Returns respected fragment that user
@@ -142,28 +142,25 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                // home
-                return new HomeFragment();
-            case 1:
                 // websis
                 return new WebsisFragment();
-            case 2:
+            case 1:
                 // sis fragment
                 return new SisFragment();
-            case 3:
+            case 2:
                 // directory fragment
                 return new DirectoryFragment();
 
-            case 4:
+            case 3:
                 // blog fragment
                 return new BlogFragment();
 
-            case 5:
+            case 4:
                 // announcements fragment
                 return new AnnouncementsFragment();
 
             default:
-                return new HomeFragment();
+                return new WebsisFragment();
         }
     }
 
@@ -186,30 +183,26 @@ public class MainActivity extends AppCompatActivity {
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.nav_home:
-                        navItemIndex = 0;
-                        CURRENT_TAG = TAG_HOME;
-                        break;
                     case R.id.nav_websis:
-                        navItemIndex = 1;
+                        navItemIndex = 0;
                         CURRENT_TAG = TAG_WEBSIS;
                         break;
                     case R.id.nav_sis:
-                        navItemIndex = 2;
+                        navItemIndex = 1;
                         CURRENT_TAG = TAG_SIS;
                         break;
                     case R.id.nav_directory:
-                        navItemIndex = 3;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_DIRECTORY;
                         break;
                     case R.id.nav_blog:
-                        navItemIndex = 4;
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_BLOG;
                         break;
-                    case R.id.nav_announcements:
-                        navItemIndex = 5;
-                        CURRENT_TAG = TAG_ANNOUNCEMENTS;
-                        break;
+//                    case R.id.nav_announcements:
+//                        navItemIndex = 4;
+//                        CURRENT_TAG = TAG_ANNOUNCEMENTS;
+//                        break;
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
@@ -275,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             // rather than home
             if (navItemIndex != 0) {
                 navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
+                CURRENT_TAG = TAG_WEBSIS;
                 loadHomeFragment();
                 return;
             }
@@ -288,15 +281,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        // show menu only when home fragment is selected
-        if (navItemIndex == 0) {
-            getMenuInflater().inflate(R.menu.main, menu);
-        }
-
-        // when fragment is announcements, load the menu created for announcements
-        if (navItemIndex == 5) {
-            getMenuInflater().inflate(R.menu.announcements, menu);
-        }
+//        // show menu only when home fragment is selected
+//        if (navItemIndex == 0) {
+//            getMenuInflater().inflate(R.menu.main, menu);
+//        }
+//
+//        // when fragment is announcements, load the menu created for announcements
+//        if (navItemIndex == 5) {
+//            getMenuInflater().inflate(R.menu.announcements, menu);
+//        }
         return true;
     }
 
@@ -315,15 +308,15 @@ public class MainActivity extends AppCompatActivity {
 
         // user is in announcements fragment
         // and selected 'Mark all as Read'
-        if (id == R.id.action_mark_all_read) {
-            Toast.makeText(getApplicationContext(), "All announcements marked as read!", Toast.LENGTH_LONG).show();
-        }
+//        if (id == R.id.action_mark_all_read) {
+//            Toast.makeText(getApplicationContext(), "All announcements marked as read!", Toast.LENGTH_LONG).show();
+//        }
 
         // user is in announcements fragment
         // and selected 'Clear All'
-        if (id == R.id.action_clear_notifications) {
-            Toast.makeText(getApplicationContext(), "Clear all announcements!", Toast.LENGTH_LONG).show();
-        }
+//        if (id == R.id.action_clear_notifications) {
+//            Toast.makeText(getApplicationContext(), "Clear all announcements!", Toast.LENGTH_LONG).show();
+//        }
 
         if (id == android.R.id.home) {
             drawer.openDrawer(GravityCompat.START);  // Hamburger Icon Opens Drawer

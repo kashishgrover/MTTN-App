@@ -22,12 +22,10 @@
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
-        <item>Home</item>
         <item>WebSIS Portal</item>
         <item>SIS Portal</item>
         <item>Telephone Directory</item>
         <item>Blog</item>
-        <item>Announcements</item>
     </string-array>
 
     <string name="activity_title_about_us">About Us</string>

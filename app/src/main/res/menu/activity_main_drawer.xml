@@ -3,10 +3,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home"
-            android:title="@string/nav_home" />
-        <item
             android:id="@+id/nav_websis"
             android:icon="@drawable/ic_websis"
             android:title="@string/nav_websis" />
@@ -24,10 +20,10 @@
             android:icon="@drawable/ic_blog"
             android:title="@string/nav_blog" />
 
-        <item
-            android:id="@+id/nav_announcements"
-            android:icon="@drawable/ic_announcements"
-            android:title="@string/nav_announcements" />
+        <!--<item-->
+            <!--android:id="@+id/nav_announcements"-->
+            <!--android:icon="@drawable/ic_announcements"-->
+            <!--android:title="@string/nav_announcements" />-->
     </group>
 
     <item android:title="Other">

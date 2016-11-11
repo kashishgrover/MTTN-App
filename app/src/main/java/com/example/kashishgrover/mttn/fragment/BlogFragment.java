@@ -1,9 +1,7 @@
 package com.example.kashishgrover.mttn.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -14,18 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.webkit.WebViewFragment;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.kashishgrover.mttn.R;
-import com.example.kashishgrover.mttn.activity.SimpleRSSReaderActivity;
-import com.example.kashishgrover.mttn.activity.SisResultActivity;
-
-import java.util.List;
 
 public class BlogFragment extends Fragment {
 
